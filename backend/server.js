@@ -3,6 +3,7 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');   // To allow cross-origin requests
+const { DateTime } = require('luxon');
 
 // Load environment variables
 const dotenv = require('dotenv');
@@ -81,7 +82,7 @@ app.get('/api/current-weather', async (req, res) => {
                 appid: process.env.OPENWEATHERMAP_API_KEY,
                 units: 'metric', // Use metric units (Celsius)
             },
-            timeout: 10000,
+            timeout: 20000,
         });
 
         if (weatherResponse.data) {
@@ -102,6 +103,78 @@ app.get('/api/current-weather', async (req, res) => {
     } catch (error) {
         console.error('Error fetching weather data:', error);
         res.status(500).json({ error: 'Failed to fetch weather data' });
+    }
+});
+
+// Endpoint to fetch departures data
+app.get('/api/departures', async(req, res) => {
+    const { airport, timezone, beginTime, endTime } = req.query;
+
+    if(!airport) {
+        return res.status(400).json({error:'Airport ICAO code required'});
+    }
+
+    try {
+        // Construct URL with icaoCode, beginTime and endTime parameters
+        const response = await axios.get(`${process.env.OPENSKY_DEPARTURE_API_URL}?airport=${airport}&begin=${beginTime}&end=${endTime}`);
+
+        // Check if the response data is an empty array
+        if (Array.isArray(response.data) && response.data.length === 0) {
+            return res.status(404).json({ error: `No Departures found for ICAO code: ${airport}` });
+        }
+
+        // Sort response data by 'firstSeen' 
+        const sortedData = response.data.sort((a, b) => a.firstSeen - b.firstSeen); 
+
+        // Iterate over the sorted data and display the required statement 
+        sortedData.forEach(flight => { 
+            const localTime = DateTime.fromSeconds(flight.firstSeen) 
+                                        .setZone(timezone) 
+                                        .toFormat('MMM dd yyyy, HH:mm'); 
+                                        
+            console.log(`Flight: ${flight.callsign.trim()}, Departure time: ${localTime}`); 
+        });
+
+        res.status(200).json(response.data);
+    } catch (error) {
+        console.error(`Error fetching ${airport} Departure data:`, error);
+        res.status(500).send('Error fetching Departure data');
+    }
+});
+
+// Endpoint to fetch arrivals data
+app.get('/api/arrivals', async(req, res) => {
+    const { airport, timezone, beginTime, endTime } = req.query;
+
+    if(!airport) {
+        return res.status(400).json({error:'Airport ICAO code required'});
+    }
+
+    try {
+        // Construct URL with icaoCode, beginTime and endTime parameters
+        const response = await axios.get(`${process.env.OPENSKY_ARRIVAL_API_URL}?airport=${airport}&begin=${beginTime}&end=${endTime}`);
+
+        // Check if the response data is an empty array
+        if (Array.isArray(response.data) && response.data.length === 0) {
+            return res.status(404).json({ error: `No arrivals found for ICAO code: ${airport}` });
+        }
+
+        // Sort response data by 'lastSeen' 
+        const sortedData = response.data.sort((a, b) => a.lastSeen - b.lastSeen); 
+        
+        // Iterate over the sorted data and display the required statement 
+        sortedData.forEach(flight => { 
+            const localTime = DateTime.fromSeconds(flight.lastSeen) 
+                                        .setZone(timezone) 
+                                        .toFormat('MMM dd yyyy, HH:mm'); 
+                                        
+            // console.log(`Flight: ${flight.callsign.trim()}, Arrival time: ${localTime}`); 
+        });
+
+        res.status(200).json(sortedData);
+    } catch (error) {
+        console.error(`Error fetching ${airport} Arrival data:`, error);
+        res.status(500).send('Error fetching Arrival data');
     }
 });
 
