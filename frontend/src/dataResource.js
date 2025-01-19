@@ -1,5 +1,7 @@
 // src/dataResource.js
 import axios from "axios";
+import { DateTime } from 'luxon';
+import tzLookup from 'tz-lookup';   // Get the timezone corresponding to latitude and longitude
 
 // Fetch images
 export const fetchAirportImages = async (airportName) => {
@@ -44,6 +46,85 @@ export const fetchTrafficData = async () => {
         return response.data; // Return the data to be used in the component
     } catch (error) {
         console.error("Error fetching air traffic data:", error);
+        throw error; // Throw the error to handle it in the calling component
+    }
+};
+
+// Fetch departures data
+export const fetchDeparturesData = async(icaoCode, airports) => {
+    try{
+
+        // Find the airport data based on ICAO code
+        const airport = airports.find(a => a.ident === icaoCode);
+        if (!airport) {
+            throw new Error(`Airport with ICAO code ${icaoCode} not found.`);
+        }
+
+        // Get the timezone for the coordinates 
+        const timezone = tzLookup(airport.latitude_deg, airport.longitude_deg);
+
+        // Get the current local date in the airport's timezone
+        const currentDate = DateTime.now().setZone(timezone);
+
+        // Set beginTime to midnight (00:00:00) of the current local day in the airport's timezone
+        const beginLocalDate = currentDate.startOf('day');
+
+        // Convert beginLocalDate to UTC and get Unix timestamp
+        const beginTime = Math.floor(beginLocalDate.toUTC().toSeconds()); // Convert to Unix timestamp in UTC
+
+        // Calculate currentTime in UTC and get Unix timestamp
+        const currentTime = Math.floor(currentDate.toUTC().toSeconds()); // Convert to Unix timestamp in UTC
+
+        // Make request to correct URL at the backend
+        const response = await axios.get(`http://localhost:3001/api/departures?airport=${icaoCode}&timezone=${timezone}&beginTime=${beginTime}&endTime=${currentTime}`);
+
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching ${icaoCode} Departures data:`, error);
+        throw error; // Throw the error to handle it in the calling component
+    }
+}
+
+// Fetch arrival data
+export const fetchArrivalsData = async (icaoCode, airports) => {
+    try {
+        // console.log("Airports:", airports);
+        // console.log("Received ICAO code:", icaoCode);
+
+        // Find the airport data based on ICAO code
+        const airport = airports.find(a => a.ident === icaoCode);
+        if (!airport) {
+            throw new Error(`Airport with ICAO code ${icaoCode} not found.`);
+        }
+        // console.log("Airport matched:", airport);
+        
+        // Get the timezone for the coordinates 
+        const timezone = tzLookup(airport.latitude_deg, airport.longitude_deg);
+        // console.log("Timezone:", timezone);
+
+        // Get the current local date in the airport's timezone
+        const currentDate = DateTime.now().setZone(timezone);
+        // console.log("Current Date:", currentDate.toString());
+
+        // Set beginTime to midnight (00:00:00) of the current local day in the airport's timezone
+        const beginLocalDate = currentDate.startOf('day');
+        // console.log("Begin Local Date:", beginLocalDate.toString());
+
+        // Convert beginLocalDate to UTC and get Unix timestamp
+        const beginTime = Math.floor(beginLocalDate.toUTC().toSeconds()); // Convert to Unix timestamp in UTC
+        // console.log("Begin Time (Unix Timestamp):", beginTime); 
+
+        // Calculate currentTime in UTC and get Unix timestamp
+        const currentTime = Math.floor(currentDate.toUTC().toSeconds()); // Convert to Unix timestamp in UTC
+        // console.log("Current Time (Unix Timestamp):", currentTime); 
+
+        // Make request to correct URL at the backend
+        const response = await axios.get(`http://localhost:3001/api/arrivals?airport=${icaoCode}&timezone=${timezone}&beginTime=${beginTime}&endTime=${currentTime}`);
+        // console.log("Response:", response.data);
+        
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching ${icaoCode} Arrivals data:`, error);
         throw error; // Throw the error to handle it in the calling component
     }
 };
