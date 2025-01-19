@@ -257,7 +257,7 @@ const Map = () => {
                         <IconButton onClick={handleCloseSidebar} sx={{ position: 'absolute', right: 10, top: 10 }}>
                             <CloseIcon />
                         </IconButton>
-                        <AirportComponent airport={selectedAirport} closePopup={handleCloseSidebar} />
+                        <AirportComponent airport={selectedAirport} airports={visibleAirports} closePopup={handleCloseSidebar} />
                     </Box>
                 )}
 
