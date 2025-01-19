@@ -3,8 +3,11 @@ import { Box } from '@mui/material';
 import AirportDetails from './AirportPopup_components/AirportDetails';
 import ImageCarousel from './AirportPopup_components/ImageCarousel';
 import WeatherData from './AirportPopup_components/WeatherData';
+// Importing DepartureBox and ArrivalBox
+import DepartureBox from './AirportPopup_components/DepartureBox';
+import ArrivalBox from './AirportPopup_components/ArrivalBox';
 
-const AirportComponent = ({ airport, closePopup }) => {
+const AirportComponent = ({ airport, airports, closePopup }) => {
     const flagUrl = `https://flagcdn.com/w320/${airport.iso_country.toLowerCase()}.png`;
     const [imagesLoaded, setImagesLoaded] = useState(false); // State to track if images are loaded
 
@@ -14,7 +17,7 @@ const AirportComponent = ({ airport, closePopup }) => {
             <ImageCarousel airport = {airport} onImagesLoaded={() => setImagesLoaded(true)}/>
             <Box 
                  sx={{
-                     maxHeight: 100,
+                     maxHeight: 200,
                      overflowY: 'auto',
                      marginTop: 2,
                      '&::-webkit-scrollbar': { width: 8 },
@@ -24,6 +27,10 @@ const AirportComponent = ({ airport, closePopup }) => {
                  }}
              >
                  <WeatherData latitude={airport.latitude_deg} longitude={airport.longitude_deg} />
+
+                {/* Pass the ICAO code to each box */}
+                <DepartureBox airports = {airports} airportCode={airport.ident} />
+                <ArrivalBox airports = {airports} airportCode={airport.ident} />
             </Box> 
         </>
 
