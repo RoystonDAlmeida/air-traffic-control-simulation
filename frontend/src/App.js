@@ -4,15 +4,19 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import Header from './components/Header';
 import Map from './Map';
+import BarChart from './components/BarChart';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom'; // Import Router components
+import Footer from './components/Footer';
 
 const App = () => {
     return (
         <div style={{ backgroundColor: '#333333', minHeight: '100vh' }}>
-            <ThemeProvider theme={theme}>
-                <Header />
-            </ThemeProvider>
             <Router>
+
+                <ThemeProvider theme={theme}>
+                    <Header />
+                </ThemeProvider>
+
                 <Box 
                     sx={{ 
                         backgroundColor: '#333333', // Set background color to gray
@@ -29,9 +33,23 @@ const App = () => {
                     </Routes>
                 </Box>
             </Router>
+
+            <Box 
+                sx={{ 
+                    backgroundColor: '#333333', // Set background color to gray
+                    paddingTop: '20px', // Leave 20px space from the top    
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start'
+                }}
+            >
+                <BarChart/>
+            </Box>
+            <Footer/>
         </div>
     );
 };
+
 
 const LocationRedirect = () => {
     const navigate = useNavigate();
