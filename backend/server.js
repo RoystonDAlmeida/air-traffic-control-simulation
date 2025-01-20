@@ -178,6 +178,17 @@ app.get('/api/arrivals', async(req, res) => {
     }
 });
 
+// Endpoint to fetch all flights data
+app.get('/api/flights', async (req, res) => {
+    try {
+        const flightsResponse = await axios.get(`${process.env.OPENSKY_FLIGHTS_API_URL}`);
+        res.status(200).send(flightsResponse.data); // Return the flight data as JSON
+    } catch (error) {
+        console.error('Error fetching all flights data:', error);
+        res.status(500).send('Error fetching flights data');
+    }
+});
+
 // Start server
 app.listen(PORT, ()=>{
     console.log(`Server is running on Port:${PORT}`);
