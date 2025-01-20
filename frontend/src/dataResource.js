@@ -128,3 +128,23 @@ export const fetchArrivalsData = async (icaoCode, airports) => {
         throw error; // Throw the error to handle it in the calling component
     }
 };
+
+// Fetch live flights data
+export const fetchAllFlightsData = async () => {
+    try {
+        // Make request to OpenSky Network API for all flight states
+        const response = await axios.get('http://localhost:3001/api/flights');
+
+        // Check if the response contains valid flight data
+        if (!response.data || !response.data.states) {
+            throw new Error('Invalid response format from OpenSky API');
+        }
+
+        // Return the array of flight states
+        return response.data.states; 
+    } catch (error) {
+        // Log the error and throw a simple message
+        console.error('Error fetching flights data:', error.message);
+        throw new Error('Failed to fetch flights data');
+    }
+};
