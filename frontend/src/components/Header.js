@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { makeStyles } from '@mui/styles';
 import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
+import SearchBar from './SearchBar';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -42,6 +43,7 @@ const Header = () => {
                     >
                         Air Traffic Control Simulation
                     </Typography>
+                    <SearchBar/>
                 </Toolbar>
             </Container>
         </AppBar>
