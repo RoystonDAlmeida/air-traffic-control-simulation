@@ -2,15 +2,24 @@
 
 The **Air Traffic Simulation App** is a web-based application designed to visualize air traffic data using interactive charts. This application leverages the OpenSky API to fetch real-time flight data, including departures, arrivals, and current flights. It also integrates weather data for airport locations and uses a local CSV file to provide airport details.
 
+## Demo
+
+Here's a quick demo of the Air Traffic Simulation App:
+
+![Air Traffic Simulation Demo](./frontend/public/demo_optimized.gif)
+
 ## 📖 Table of Contents
 
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Directory Structure](#directory-structure)
-- [Contributing](#contributing)
-- [License](#license)
+- [✈️ Air Traffic Simulation App](#️-air-traffic-simulation-app)
+  - [Demo](#demo)
+  - [📖 Table of Contents](#-table-of-contents)
+  - [🚀 Features](#-features)
+  - [💻 Technologies Used](#-technologies-used)
+  - [📥 Installation](#-installation)
+  - [📊 Usage](#-usage)
+  - [📂 Directory Structure](#-directory-structure)
+  - [🤝 Contributing](#-contributing)
+  - [📄 License](#-license)
 
 ## 🚀 Features
 
@@ -76,7 +85,7 @@ OPENWEATHERMAP_API_URL =
 Navigate to the `backend/` directory, then:
 
 ```bash
-node server.js 
+npm start
 ```
 - Start the frontend development server, by navigating to the `frontend/` directory, then:
 
