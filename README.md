@@ -6,7 +6,10 @@ The **Air Traffic Simulation App** is a web-based application designed to visual
 
 Here's a quick demo of the Air Traffic Simulation App:
 
-<img src="./frontend/public/demo_optimized.gif" alt="Air Traffic Simulation Demo"/>
+<video width="800" max-width="100%" controls loop muted poster="./frontend/public/demo_poster.png">
+  <source src="./frontend/public/Air_Traffic_Control_Simulation.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ## 📖 Table of Contents
 
