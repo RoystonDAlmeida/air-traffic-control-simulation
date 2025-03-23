@@ -6,25 +6,7 @@ The **Air Traffic Simulation App** is a web-based application designed to visual
 
 Here's a quick demo of the Air Traffic Simulation App:
 
-<div id="gif-container">
-  <a id="gif-link" href="./frontend/public/Optimized_Demo.gif" target="_blank">Click here to view the Air Traffic Simulation Demo GIF</a>
-  <img id="demo-gif" src="./frontend/public/Optimized_Demo.gif" alt="Air Traffic Simulation GIF" style="max-width: 100%; height: auto; display: block; margin: 0 auto; display: none;">
-</div>
-
-<script>
-  const gif = document.getElementById('demo-gif');
-  const link = document.getElementById('gif-link');
-
-  gif.onload = () => {
-    link.style.display = 'none';
-    gif.style.display = 'block';
-  };
-
-  gif.onerror = () => {
-    link.style.display = 'block';
-    gif.style.display = 'none';
-  };
-</script>
+<img src="./frontend/public/Optimized_Demo.gif" alt="Air Traffic Simulation GIF" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
 
 ## 📖 Table of Contents
 
